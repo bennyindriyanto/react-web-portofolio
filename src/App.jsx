@@ -77,7 +77,7 @@ function App() {
       <input type="text" name="_hp" className="hp" tabIndex={-1} autoComplete="off" />
 
       <header className="hero">
-        <div className="hero-bg-img" />
+        <img src="/images/bg.jpg" alt="" className="hero-bg-img" />
         <div className="container">
           <div className="hero-content">
             <img src="/images/profile.jpg" alt="Benny Indriyanto" className="avatar-img" />
