@@ -63,6 +63,18 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+.avatar-img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 24px;
+  border: 3px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.35);
+  display: block;
+  filter: drop-shadow(0 4px 20px rgba(102,126,234,0.2));
+}
+
 .avatar {
   width: 110px;
   height: 110px;
@@ -805,6 +817,7 @@ body {
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
   .hero-content h1 { font-size: 2rem; }
+  .avatar-img { width: 100px; height: 100px; }
   .avatar { width: 90px; height: 90px; font-size: 1.8rem; }
   .hero-links a { padding: 8px 16px; font-size: 0.85rem; }
   .section { padding: 56px 0; }

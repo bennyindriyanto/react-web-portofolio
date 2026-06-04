@@ -80,7 +80,7 @@ function App() {
         <div className="hero-bg" />
         <div className="container">
           <div className="hero-content">
-            <div className="avatar">BI</div>
+            <img src="/profile.svg" alt="Benny Indriyanto" className="avatar-img" />
             <h1>Benny Indriyanto</h1>
             <p className="subtitle">Senior Backend Engineer | Building Robust &amp; Scalable Systems</p>
             <p className="location"><i className="fas fa-map-marker-alt"></i> South Jakarta, Jakarta, Indonesia</p>
