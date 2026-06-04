@@ -16,6 +16,8 @@ function App() {
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('')
   const [sending, setSending] = useState(false)
+  const lastSubmit = useRef(0)
+  const formLoaded = useRef(Date.now())
 
   function validate() {
     const errs = {}
@@ -38,6 +40,23 @@ function App() {
 
     if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
       setStatus('error-config')
+      return
+    }
+
+    const now = Date.now()
+    if (now - lastSubmit.current < 30000) {
+      setStatus('rate-limit')
+      return
+    }
+
+    const hp = document.querySelector('input[name="_hp"]')
+    if (hp && hp.value) {
+      setStatus('spam')
+      return
+    }
+
+    if (now - formLoaded.current < 3000) {
+      setStatus('spam')
       return
     }
 
@@ -534,6 +553,16 @@ function App() {
               {status === 'error-config' && (
                 <div className="form-status error">
                   <i className="fas fa-exclamation-triangle"></i> Email service not configured. Please set VITE_EMAILJS_* environment variables.
+                </div>
+              )}
+              {status === 'rate-limit' && (
+                <div className="form-status warn">
+                  <i className="fas fa-clock"></i> Please wait at least 30 seconds before sending another message.
+                </div>
+              )}
+              {status === 'spam' && (
+                <div className="form-status warn">
+                  <i className="fas fa-robot"></i> Suspicious activity detected. Please try again later.
                 </div>
               )}
             </form>
