@@ -51,6 +51,17 @@ body {
   pointer-events: none;
 }
 
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(6px) brightness(0.35);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
 .hero-content {
   position: relative;
   z-index: 1;
@@ -64,8 +75,8 @@ body {
 }
 
 .avatar-img {
-  width: 130px;
-  height: 130px;
+  width: 156px;
+  height: 156px;
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 24px;
@@ -817,7 +828,7 @@ body {
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
   .hero-content h1 { font-size: 2rem; }
-  .avatar-img { width: 100px; height: 100px; }
+  .avatar-img { width: 120px; height: 120px; }
   .avatar { width: 90px; height: 90px; font-size: 1.8rem; }
   .hero-links a { padding: 8px 16px; font-size: 0.85rem; }
   .section { padding: 56px 0; }

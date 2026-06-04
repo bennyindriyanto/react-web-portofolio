@@ -77,10 +77,10 @@ function App() {
       <input type="text" name="_hp" className="hp" tabIndex={-1} autoComplete="off" />
 
       <header className="hero">
-        <div className="hero-bg" />
+        <img src="/images/bg.jpg" alt="" className="hero-bg-img" />
         <div className="container">
           <div className="hero-content">
-            <img src="/profile.svg" alt="Benny Indriyanto" className="avatar-img" />
+            <img src="/images/profile.jpg" alt="Benny Indriyanto" className="avatar-img" />
             <h1>Benny Indriyanto</h1>
             <p className="subtitle">Senior Backend Engineer | Building Robust &amp; Scalable Systems</p>
             <p className="location"><i className="fas fa-map-marker-alt"></i> South Jakarta, Jakarta, Indonesia</p>
