@@ -471,7 +471,7 @@ function App() {
                   <span>South Jakarta, Indonesia</span>
                 </div>
               </div>
-              <a href="#" className="btn-download-cv" onClick={(e) => { e.preventDefault(); alert('CV download akan segera tersedia.'); }}>
+              <a href="#" className="btn-download-cv" onClick={(e) => { e.preventDefault(); alert('CV download akan segera tersedia. Silakan hubungi saya langsung.'); }}>
                 <i className="fas fa-download"></i> Download CV
               </a>
             </div>
