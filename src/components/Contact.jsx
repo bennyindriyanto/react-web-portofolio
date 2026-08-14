@@ -1,4 +1,4 @@
-import { memo, useRef, useState, useCallback } from 'react'
+import { memo, useRef, useState, useCallback, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import { personal } from '../data/portfolio'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -7,9 +7,61 @@ const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
+const DAILY_LIMIT = 3
+const STORAGE_KEY = 'portfolio_submissions'
+
 function sanitize(str) {
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }
   return String(str).replace(/[&<>"']/g, (c) => map[c])
+}
+
+function getDailyCount() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return 0
+    const data = JSON.parse(raw)
+    const today = new Date().toDateString()
+    if (data.date !== today) {
+      localStorage.removeItem(STORAGE_KEY)
+      return 0
+    }
+    return data.count || 0
+  } catch {
+    return 0
+  }
+}
+
+function incrementDailyCount() {
+  try {
+    const today = new Date().toDateString()
+    const current = getDailyCount()
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count: current + 1 }))
+  } catch {
+    /* localStorage unavailable */
+  }
+}
+
+function isSpamContent(text) {
+  if (!text) return false
+  const lower = text.toLowerCase()
+
+  const urlPattern = /https?:\/\/|www\.\S+\.\S+/i
+  if (urlPattern.test(lower)) return true
+
+  const spamPhrases = [
+    'buy now', 'click here', 'free money', 'act now', 'limited offer',
+    'congratulations', 'you have won', 'casino', 'crypto', 'bitcoin',
+    'seo service', 'guest post', 'backlink', 'traffic',
+  ]
+  if (spamPhrases.some(p => lower.includes(p))) return true
+
+  const repeated = /(.)\1{8,}/
+  if (repeated.test(text)) return true
+
+  const charRatio = text.replace(/[a-z0-9\s]/gi, '').length / text.length
+  if (charRatio > 0.4 && text.length > 20) return true
+
+  return false
 }
 
 function FormStatus({ status }) {
@@ -20,7 +72,8 @@ function FormStatus({ status }) {
     error: { className: 'error', icon: 'exclamation-circle', message: 'Failed to send message. Please try again later.' },
     'error-config': { className: 'error', icon: 'exclamation-triangle', message: 'Email service not configured.' },
     'rate-limit': { className: 'warn', icon: 'clock', message: 'Please wait 30 seconds before sending another message.' },
-    spam: { className: 'warn', icon: 'robot', message: 'Suspicious activity detected. Please try again later.' },
+    'daily-limit': { className: 'warn', icon: 'clock', message: 'Daily message limit reached. Please try again tomorrow.' },
+    spam: { className: 'warn', icon: 'robot', message: 'Message rejected by spam filter.' },
   }
 
   const cfg = statusConfig[status]
@@ -34,8 +87,8 @@ function FormStatus({ status }) {
         {(status === 'error' || status === 'error-config') && <circle cx="12" cy="12" r="10" />}
         {(status === 'error' || status === 'error-config') && <line x1="12" y1="8" x2="12" y2="12" />}
         {(status === 'error' || status === 'error-config') && <line x1="12" y1="16" x2="12.01" y2="16" />}
-        {(status === 'rate-limit' || status === 'spam') && <circle cx="12" cy="12" r="10" />}
-        {(status === 'rate-limit' || status === 'spam') && <polyline points="12 6 12 12 16 14" />}
+        {(status === 'rate-limit' || status === 'daily-limit' || status === 'spam') && <circle cx="12" cy="12" r="10" />}
+        {(status === 'rate-limit' || status === 'daily-limit' || status === 'spam') && <polyline points="12 6 12 12 16 14" />}
       </svg>
       {cfg.message}
     </div>
@@ -53,6 +106,11 @@ function Contact() {
   const [sending, setSending] = useState(false)
   const lastSubmit = useRef(0)
   const [formLoaded] = useState(() => Date.now())
+  const tokenRef = useRef('')
+
+  useEffect(() => {
+    tokenRef.current = btoa(String(Date.now()))
+  }, [])
 
   const validate = useCallback(() => {
     const errs = {}
@@ -64,6 +122,7 @@ function Contact() {
     if (!message || message.length < 10) errs.message = 'Message is required (min 10 characters)'
     if (name.length > 200) errs.name = 'Name is too long'
     if (message.length > 5000) errs.message = 'Message is too long'
+    if (isSpamContent(message)) errs.message = 'Message contains content not allowed'
     return errs
   }, [form])
 
@@ -92,18 +151,31 @@ function Contact() {
     }
 
     const now = Date.now()
+
     if (now - lastSubmit.current < 30000) {
       setStatus('rate-limit')
       return
     }
 
-    const hp = document.querySelector('input[name="_hp"]')
-    if (hp?.value) {
+    if (now - formLoaded < 3000) {
       setStatus('spam')
       return
     }
 
-    if (now - formLoaded < 3000) {
+    const hp1 = document.querySelector('input[name="website"]')
+    const hp2 = document.querySelector('input[name="company"]')
+    const hp3 = document.querySelector('textarea[name="comments"]')
+    if (hp1?.value || hp2?.value || hp3?.value) {
+      setStatus('spam')
+      return
+    }
+
+    if (getDailyCount() >= DAILY_LIMIT) {
+      setStatus('daily-limit')
+      return
+    }
+
+    if (isSpamContent(form.message)) {
       setStatus('spam')
       return
     }
@@ -121,10 +193,19 @@ function Contact() {
           message: sanitize(form.message.trim()),
           to_email: 'neobenny1@gmail.com',
         },
-        EMAILJS_PUBLIC_KEY
+        {
+          publicKey: EMAILJS_PUBLIC_KEY,
+          blockHeadless: true,
+          limitRate: {
+            id: 'portfolio-contact',
+            throttle: 3600000,
+          },
+        }
       )
       setStatus('success')
       setForm({ name: '', email: '', message: '' })
+      incrementDailyCount()
+      lastSubmit.current = Date.now()
     } catch {
       setStatus('error')
     } finally {
@@ -172,24 +253,40 @@ function Contact() {
                 <span>{personal.location}</span>
               </div>
             </div>
-            <a
-              href="#"
-              className="btn-download-cv"
-              onClick={(e) => {
-                e.preventDefault()
-                alert('CV download akan segera tersedia. Silakan hubungi saya langsung.')
-              }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              Download CV
-            </a>
+            <div className="contact-cv-actions">
+              <a
+                href={personal.cvView}
+                className="btn-download-cv btn-view-cv"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                View CV
+              </a>
+              <a
+                href={personal.cvDownload}
+                className="btn-download-cv"
+                download
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download CV
+              </a>
+            </div>
           </div>
           <form ref={formRef} className="contact-form" onSubmit={handleSubmit} noValidate>
-            <input type="text" name="_hp" className="hp" tabIndex={-1} autoComplete="off" />
+            <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, width: 0, zIndex: -1 }}>
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+              <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+              <textarea name="comments" tabIndex={-1} autoComplete="off" readOnly />
+              <input type="text" name="_hp" tabIndex={-1} autoComplete="off" />
+            </div>
             <div className="form-group">
               <label htmlFor="name">Your Name</label>
               <input

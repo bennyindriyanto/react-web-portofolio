@@ -37,12 +37,12 @@ function Experience() {
   const ref = useScrollReveal()
 
   return (
-    <section className="section section-alt" id="experience" ref={ref}>
+    <section className="section" id="experience" ref={ref}>
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">Career</span>
-          <h2>Work Experience</h2>
-          <div className="section-divider" />
+          <span className="section-code">// experience</span>
+          <h2 className="section-title">Work Experience</h2>
+          <div className="section-rule" />
         </div>
         <div className="timeline">
           {experience.map((item, index) => (

@@ -11,7 +11,7 @@ const levelClass = {
 function SkillTag({ skill }) {
   return (
     <span className="tag">
-      <i className={skill.icon} />
+      <i className={skill.icon} aria-hidden="true" />
       {skill.name}
       {skill.level && (
         <span className={`tag-level ${levelClass[skill.level]}`}>{skill.level}</span>
@@ -27,7 +27,7 @@ function SkillGroup({ group }) {
 
   return (
     <div className="skill-group" ref={ref}>
-      <h4><i className={`fas fa-${group.icon}`} /> {group.category}</h4>
+      <h4><i className={`fas fa-${group.icon}`} aria-hidden="true" /> {group.category}</h4>
       <div className="tags">
         {group.skills.map((skill) => (
           <SkillTagMemo key={skill.name} skill={skill} />
@@ -46,9 +46,9 @@ function Skills() {
     <section className="section" id="skills" ref={ref}>
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">Expertise</span>
-          <h2>Technical Skills</h2>
-          <div className="section-divider" />
+          <span className="section-code">// skills</span>
+          <h2 className="section-title">Technical Skills</h2>
+          <div className="section-rule" />
         </div>
         <div className="skills-wrapper">
           {skillGroups.map((group) => (

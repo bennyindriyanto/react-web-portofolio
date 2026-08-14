@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react'
+import { useTheme } from './hooks/useTheme'
 
 const Navbar = lazy(() => import('./components/Navbar').then(m => ({ default: m.default })))
 const Hero = lazy(() => import('./components/Hero').then(m => ({ default: m.default })))
@@ -17,10 +18,12 @@ function SectionLoader() {
 }
 
 function App() {
+  const { theme, toggleTheme } = useTheme()
+
   return (
     <div className="app">
       <Suspense fallback={<SectionLoader />}>
-        <Navbar />
+        <Navbar theme={theme} onToggleTheme={toggleTheme} />
       </Suspense>
       <Suspense fallback={<SectionLoader />}>
         <Hero />

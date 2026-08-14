@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benny Indriyanto — Senior Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #101318;
+    --ink-soft: #4a5560;
+    --muted: #7a8794;
+    --accent: #0e7c6b;
+    --accent-deep: #0a5f52;
+    --rule: #dfe5e9;
+    --mono: "JetBrains Mono", "FiraCode Nerd Font", monospace;
+    --sans: "Inter", "Space Grotesk", "DejaVu Sans", sans-serif;
+  }
+
+  html, body {
+    font-family: var(--sans);
+    color: var(--ink);
+    background: #ffffff;
+    font-size: 9pt;
+    line-height: 1.38;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 11mm 15mm 9mm;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ---------- Header ---------- */
+  .nameplate {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2.5pt solid var(--ink);
+    padding-bottom: 3.2mm;
+    margin-bottom: 4mm;
+  }
+  .name {
+    font-size: 22pt;
+    font-weight: 900;
+    letter-spacing: 0.5pt;
+    line-height: 1;
+  }
+  .name .accent { color: var(--accent); }
+  .title-line {
+    margin-top: 2mm;
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    color: var(--accent-deep);
+  }
+  .title-line .carat { color: var(--muted); }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1mm;
+    font-size: 8pt;
+    color: var(--ink-soft);
+  }
+  .contact span { white-space: nowrap; }
+  .contact .mono { font-family: var(--mono); color: var(--ink); }
+
+  /* ---------- Section ---------- */
+  .section { margin-bottom: 4mm; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 2.5mm;
+    margin-bottom: 1.8mm;
+  }
+  .section-head .code {
+    font-family: var(--mono);
+    font-size: 8pt;
+    color: var(--accent);
+    letter-spacing: 0.3pt;
+  }
+  .section-head h2 {
+    font-size: 10.5pt;
+    font-weight: 800;
+    letter-spacing: 2pt;
+    text-transform: uppercase;
+  }
+  .section-head .rule {
+    flex: 1;
+    height: 1pt;
+    background: var(--rule);
+    transform: translateY(-1.5pt);
+  }
+
+  /* ---------- Summary ---------- */
+  .summary p { color: var(--ink-soft); }
+  .summary strong { color: var(--ink); }
+
+  /* ---------- Experience ---------- */
+  .job { margin-bottom: 3mm; }
+  .job:last-child { margin-bottom: 0; }
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .job-title { font-size: 10pt; font-weight: 800; }
+  .job-title .at { color: var(--muted); font-weight: 400; font-style: italic; }
+  .job-title .company { color: var(--accent-deep); }
+  .job-meta {
+    font-family: var(--mono);
+    font-size: 7.8pt;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .job ul { list-style: none; margin: 0; }
+  .job li {
+    padding-left: 5mm;
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .job li::before {
+    content: ">";
+    position: absolute;
+    left: 1mm;
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 8pt;
+  }
+  .job strong { color: var(--ink); }
+
+  /* ---------- Skills ---------- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 7mm;
+    row-gap: 1.6mm;
+  }
+  .skill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1.1mm;
+    border-bottom: 0.5pt dotted var(--rule);
+  }
+  .skill-cat {
+    font-size: 7.8pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+  }
+  .skill-items {
+    font-size: 8.4pt;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  /* ---------- Projects ---------- */
+  .proj { margin-bottom: 2.2mm; }
+  .proj-title { font-size: 9.5pt; font-weight: 800; }
+  .proj-title .tag { color: var(--accent); }
+  .proj-desc { color: var(--ink-soft); font-size: 8.8pt; }
+  .proj-tech {
+    font-family: var(--mono);
+    font-size: 7.6pt;
+    color: var(--accent-deep);
+  }
+
+  /* ---------- Education / Certs ---------- */
+  .edu-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .edu-degree { font-weight: 800; font-size: 9.5pt; }
+  .edu-school { color: var(--accent-deep); }
+  .edu-meta { font-family: var(--mono); font-size: 7.8pt; color: var(--muted); }
+
+  .cert-list { list-style: none; margin: 0; margin-top: 1.5mm; }
+  .cert-list li {
+    padding-left: 5mm;
+    position: relative;
+    color: var(--ink-soft);
+  }
+  .cert-list li::before {
+    content: ">"; position: absolute; left: 1mm;
+    font-family: var(--mono); color: var(--accent); font-size: 8pt;
+  }
+  .cert-list .issuer { color: var(--muted); font-size: 8.4pt; }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    margin-top: auto;
+    padding-top: 2.4mm;
+    border-top: 1pt solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 7.2pt;
+    color: var(--muted);
+  }
+  .footer .dot { color: var(--accent); }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="nameplate">
+      <div>
+        <h1 class="name">BENNY <span class="accent">INDRIYANTO</span></h1>
+        <div class="title-line"><span class="carat">$</span> Senior Backend Engineer — Java / Spring Boot / Microservices</div>
+      </div>
+      <div class="contact">
+        <span>South Jakarta, Indonesia</span>
+        <span><span class="mono">+62 813-9292-8197</span></span>
+        <span><span class="mono">neobenny1@gmail.com</span></span>
+        <span class="mono">linkedin.com/in/benny-indriyanto</span>
+        <span class="mono">github.com/bennyindriyanto</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="code">// profile</span>
+        <h2>Summary</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="summary">
+        <p><strong>4+ years</strong> building production systems across <strong>finance &amp; payments</strong> (credit card, debit, Visa/Mastercard,
+        merchant EDC, QRIS) and <strong>EDI supply-chain automation</strong> (EDIFACT, SFTP). Expert in <strong>Java / Spring Boot microservices</strong> —
+        crafting scalable services, integrating Elasticsearch, fortifying applications with robust encryption protocols, and
+        developing RESTful APIs with JDBC. Experienced in cloud and Linux server deployments.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="code">// experience</span>
+        <h2>Experience</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <div class="job-title">Back End Developer <span class="at">@</span> <span class="company">PT EDI Indonesia</span></div>
+          <div class="job-meta">Oct 2025 — Present</div>
+        </div>
+        <ul>
+          <li>Design &amp; operate <strong>Java/Spring Boot services</strong> automating B2B purchase-order pipelines for <strong>7+ buyers</strong>
+            (Alfamart, Alfamidi, Alfabean, LSI, KCSOFTEX, FFI, Nestle, CCEP, P&amp;G) into <strong>EDIFACT ORDERS</strong> delivered via <strong>SFTP</strong>,
+            processing <strong>20k–50k PO/month</strong>.</li>
+          <li>Implement the full PO pipeline: multi-protocol fetch, GLN/GTIN &amp; price validation, EDIFACT generation, secure delivery.</li>
+          <li>Deploy &amp; manage <strong>Dockerized services on Linux</strong>; built a monitoring dashboard for <strong>22 servers</strong> with
+            Telegram alerting, sustaining <strong>~99.9% pipeline uptime</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <div class="job-title">Software Developer <span class="at">@</span> <span class="company">Bank Mega</span></div>
+          <div class="job-meta">May 2024 — Oct 2025</div>
+        </div>
+        <ul>
+          <li>Developed the <strong>credit-card core loan system</strong> on a microservices architecture (Spring Boot + Elasticsearch), processing <strong>50k+ daily transactions</strong> at <strong>p95 latency &lt; 200ms</strong>.</li>
+          <li>Built <strong>QRIS payment</strong> &amp; <strong>merchant management</strong> platforms integrated with EDC; secured transactions with encryption, OAuth 2.0, JWT.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <div class="job-title">Quality Assurance Engineer <span class="at">@</span> <span class="company">PT Mitra Transaksi Indonesia</span></div>
+          <div class="job-meta">Sep 2021 — Feb 2024</div>
+        </div>
+        <ul>
+          <li>Data analysis, <strong>API testing</strong> (Postman), and <strong>performance testing</strong> (JMeter); developed <strong>automation testing</strong> and performed <strong>penetration testing</strong> for financial products.</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <div class="job-head">
+          <div class="job-title">Web Developer <span class="at">@</span> <span class="company">Freelance</span></div>
+          <div class="job-meta">Apr 2021 — Dec 2021</div>
+        </div>
+        <ul>
+          <li>Delivered end-to-end web solutions with a focus on SQL database optimization.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="code">// stack</span>
+        <h2>Technical Skills</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-row">
+          <span class="skill-cat">Languages</span>
+          <span class="skill-items">Java · JavaScript · Python · C++</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Frameworks</span>
+          <span class="skill-items">Spring Boot · Microservices · REST · JPA/JDBC</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Security</span>
+          <span class="skill-items">Spring Security · OAuth 2.0 · JWT · Encryption</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Databases</span>
+          <span class="skill-items">MySQL · PostgreSQL · SQL Server · MongoDB · Redis</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Search &amp; Stream</span>
+          <span class="skill-items">Elasticsearch · Kafka · Memcached</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Testing &amp; QA</span>
+          <span class="skill-items">JUnit · Mockito · Selenium · Postman · JMeter · Pen Testing</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">DevOps</span>
+          <span class="skill-items">Docker · Kubernetes · Linux · Tomcat · AWS/GCP</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">CI/CD &amp; Ops</span>
+          <span class="skill-items">Jenkins · GitHub Actions · Prometheus/Grafana · ELK</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-cat">Tools</span>
+          <span class="skill-items">Git · Postman · Maven/Gradle · Jira · IntelliJ</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="code">// projects</span>
+        <h2>Selected Projects</h2>
+        <div class="rule"></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-title"><span class="tag">Core Loan System</span> — Bank Mega</div>
+        <div class="proj-desc">Credit-card core loan platform on microservices; Elasticsearch-backed search across thousands of daily transactions.</div>
+        <div class="proj-tech">Java · Spring Boot · Elasticsearch · Microservices</div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-title"><span class="tag">EDI PO Automation</span> — PT EDI Indonesia</div>
+        <div class="proj-desc">Automated PO pipeline for retailers; GLN/GTIN &amp; price validation, EDIFACT ORDERS D:96A generation, SFTP delivery.</div>
+        <div class="proj-tech">Java 21 · Spring Boot 3 · PostgreSQL · JPA · JSch SFTP · EDIFACT</div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-title"><span class="tag">QRIS Payment</span> &amp; <span class="tag">Merchant Platform</span></div>
+        <div class="proj-desc">Real-time QRIS payment solution and merchant management platform integrated with EDC payment systems.</div>
+        <div class="proj-tech">Java · Spring Boot · JDBC · REST APIs · SQL</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="code">// education</span>
+        <h2>Education &amp; Certification</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="edu-line">
+        <div class="edu-degree">S1 Information Technology — <span class="edu-school">Universitas Dian Nuswantoro</span></div>
+        <div class="edu-meta">2014 — 2019</div>
+      </div>
+      <ul class="cert-list">
+        <li>Certified Software Engineer <span class="issuer">— HackerRank (Java, C++)</span></li>
+        <li>REST API (Intermediate) Certificate <span class="issuer">— HackerRank</span></li>
+        <li>Secure Coding <span class="issuer">— Online Course</span></li>
+        <li>Prompt Engineering for Everyone <span class="issuer">— Online Course</span></li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <span><span class="dot">$</span> benny.indriyanto</span>
+      <span>neobenny1@gmail.com <span class="dot">·</span> +62 813-9292-8197</span>
+    </footer>
+
+  </div>
+</body>
+</html>

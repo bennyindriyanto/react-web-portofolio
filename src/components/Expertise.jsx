@@ -13,12 +13,12 @@ const iconMap = {
 
 function ExpertiseCard({ item, index }) {
   const ref = useScrollReveal(0.1)
-  const delay = index * 100
+  const delay = index * 80
 
   return (
     <div className="expertise-card" ref={ref} style={{ transitionDelay: `${delay}ms` }}>
       <div className="exp-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d={iconMap[item.icon] || iconMap['sitemap']} />
         </svg>
       </div>
@@ -34,12 +34,12 @@ function Expertise() {
   const ref = useScrollReveal()
 
   return (
-    <section className="section section-alt" id="expertise" ref={ref}>
+    <section className="section" id="expertise" ref={ref}>
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">Approach</span>
-          <h2>Engineering Excellence</h2>
-          <div className="section-divider" />
+          <span className="section-code">// expertise</span>
+          <h2 className="section-title">Engineering Excellence</h2>
+          <div className="section-rule" />
         </div>
         <div className="expertise-grid">
           {expertise.map((item, index) => (
